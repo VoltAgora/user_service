@@ -1,3 +1,5 @@
+from fastapi.responses import JSONResponse
+
 class ResultHandler:
     @staticmethod
     def success(data=None, message="OK"):
@@ -18,3 +20,11 @@ class ResultHandler:
     @staticmethod
     def internal_error(message="Internal error"):
         return {"success": False, "message": message, "data": None}
+    
+    @staticmethod
+    def forbidden(message="Forbidden", data=None):
+        """
+        Respuesta HTTP 403 - Forbidden. Usado cuando el usuario está autenticado
+        pero no tiene permisos suficientes.
+        """
+        return JSONResponse(status_code=403, content={"success": False, "message": message, "data": data})
