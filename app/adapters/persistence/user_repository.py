@@ -39,6 +39,19 @@ class UserRepositorySQL:
         finally:
             db.close()
 
+    def count_active_admins(self, exclude_user_id: Optional[int] = None) -> int:
+        """HU-09: Cuenta administradores activos (role=0). exclude_user_id para excluir al que se está modificando."""
+        db = self._get_db_session()
+        try:
+            q = db.query(UserEntity).filter(UserEntity.role == 0, UserEntity.is_active == True)
+            if exclude_user_id is not None:
+                q = q.filter(UserEntity.id != exclude_user_id)
+            return q.count()
+        except SQLAlchemyError:
+            raise
+        finally:
+            db.close()
+
     # Ahora acepta un dict con los campos a actualizar
     def update_profile(self, user_id: int, updates: Dict[str, Any]) -> Optional[UserEntity]:
         """

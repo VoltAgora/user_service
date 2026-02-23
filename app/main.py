@@ -1,10 +1,19 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.openapi.utils import get_openapi
 from app.adapters.http.routes import router as users_router
 
 app = FastAPI(title="User Service")
 
-app.include_router(users_router, prefix="/users")
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+app.include_router(users_router)
 
 def custom_openapi():
     if app.openapi_schema:

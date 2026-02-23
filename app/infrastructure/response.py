@@ -28,3 +28,8 @@ class ResultHandler:
         pero no tiene permisos suficientes.
         """
         return JSONResponse(status_code=403, content={"success": False, "message": message, "data": data})
+
+    @staticmethod
+    def not_found(message="Recurso no encontrado", data=None):
+        """Respuesta HTTP 404 - Not Found."""
+        return JSONResponse(status_code=404, content={"success": False, "message": message, "data": data})
